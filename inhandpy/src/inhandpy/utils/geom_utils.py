@@ -194,7 +194,7 @@ def _object_to_world(obj_pos, M):
 
     return world_pos
 
-def depth_to_pts3d(depth, P, V, params=None, ordered_pts=False):
+def depth_to_pts3d(depth, P, V, params=None, ordered_pts=False, device="cpu"):
     """
     :param depth: depth map, (C, H, W) or (H, W)
     :param P: projection matrix, (4, 4)
@@ -208,7 +208,7 @@ def depth_to_pts3d(depth, P, V, params=None, ordered_pts=False):
 
     depth_map = depth.squeeze(0) if (len(depth.shape) == 3) else depth
     H, W = depth_map.shape
-    pixel_pos = _vectorize_pixel_coords(rows=H, cols=W)
+    pixel_pos = _vectorize_pixel_coords(rows=H, cols=W, device=device)
 
     clip_pos = _pixel_to_clip(pixel_pos, depth_map, params)
     eye_pos = _clip_to_eye(clip_pos, P)
